@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,12 +12,13 @@
     :root {
       --navy: #071426;
       --navy-light: #0d2038;
-      --gold: #d7b56d;
-      --gold-light: #f0d99e;
-      --white: #f8f7f3;
-      --muted: #b9c3d0;
-      --line: rgba(215,181,109,.25);
-      --panel: rgba(255,255,255,.035);
+      --navy-card: #102640;
+      --gold: #d6b36a;
+      --gold-light: #f1dba2;
+      --white: #f8f6f0;
+      --muted: #b7c0cc;
+      --border: rgba(214,179,106,.28);
+      --radius: 18px;
     }
 
     * { box-sizing: border-box; }
@@ -31,745 +32,1109 @@
       margin: 0;
       background: var(--navy);
       color: var(--white);
-      font-family: Arial, Tahoma, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       line-height: 1.7;
     }
 
+    body[dir="rtl"] {
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
     a { color: inherit; text-decoration: none; }
-    button { font: inherit; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
 
     .container {
       width: min(1160px, 90%);
-      margin: auto;
+      margin: 0 auto;
     }
 
-    .topbar {
-      border-bottom: 1px solid var(--line);
-      background: rgba(7,20,38,.96);
+    .gold { color: var(--gold); }
+
+    .announcement {
+      background: #050d19;
+      color: var(--gold-light);
+      text-align: center;
+      padding: 8px 15px;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+    }
+
+    header {
       position: sticky;
       top: 0;
       z-index: 20;
-      backdrop-filter: blur(14px);
+      background: rgba(7,20,38,.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
     }
 
-    .nav {
+    .navbar {
       min-height: 82px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 22px;
+      gap: 20px;
     }
 
     .brand {
-      color: var(--gold);
-      font-size: 25px;
-      font-weight: 800;
-      letter-spacing: 5px;
-      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
     }
 
-    .brand small {
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: Georgia, serif;
+      font-size: 25px;
+      border-radius: 50%;
+    }
+
+    .brand-name {
+      font-family: Georgia, serif;
+      letter-spacing: 3px;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .brand-subtitle {
       display: block;
       color: var(--muted);
       font-size: 9px;
-      letter-spacing: 3px;
-      font-weight: 500;
-      line-height: 1.4;
+      letter-spacing: 2px;
+      margin-top: 4px;
     }
 
-    .navlinks {
+    nav {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 22px;
+    }
+
+    nav a {
+      color: #e0e4e9;
       font-size: 13px;
-      color: var(--muted);
+      transition: color .2s;
     }
 
-    .navlinks a:hover { color: var(--gold); }
+    nav a:hover { color: var(--gold); }
 
-    .languages {
+    .nav-actions {
       display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
     }
 
-    .languages button {
-      border: 1px solid var(--line);
+    .language-select {
+      color: var(--white);
+      background: var(--navy-light);
+      border: 1px solid var(--border);
+      padding: 9px 10px;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .language-select option { background: var(--navy); }
+
+    .menu-toggle {
+      display: none;
+      color: var(--gold);
       background: transparent;
-      color: var(--muted);
-      padding: 6px 9px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
     }
 
-    .languages button.active,
-    .languages button:hover {
-      background: var(--gold);
-      color: var(--navy);
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 23px;
+      border-radius: 7px;
+      font-weight: bold;
+      font-size: 13px;
+      transition: transform .2s, background .2s;
+      border: 1px solid var(--gold);
     }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #071426;
+    }
+
+    .btn-gold:hover { background: var(--gold-light); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold-light);
+    }
+
+    .btn-outline:hover { background: rgba(214,179,106,.1); }
 
     .hero {
-      position: relative;
-      overflow: hidden;
-      min-height: 620px;
+      min-height: 640px;
       display: flex;
       align-items: center;
+      position: relative;
+      overflow: hidden;
       background:
-        radial-gradient(ellipse at 80% 30%, rgba(215,181,109,.12), transparent 40%),
-        linear-gradient(135deg, #071426 25%, #0c1f36 100%);
-      border-bottom: 1px solid var(--line);
+        radial-gradient(ellipse at 78% 40%, rgba(214,179,106,.13), transparent 36%),
+        linear-gradient(125deg, #071426 30%, #0b1d33 100%);
     }
 
     .hero::before {
       content: "";
       position: absolute;
-      width: 440px;
-      height: 440px;
-      border: 1px solid rgba(215,181,109,.13);
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(214,179,106,.13);
       border-radius: 50%;
-      right: -130px;
-      top: 80px;
-      box-shadow: 0 0 0 50px rgba(215,181,109,.025),
-                  0 0 0 100px rgba(215,181,109,.02);
-    }
-
-    [dir="rtl"] .hero::before {
-      right: auto;
-      left: -130px;
+      right: -150px;
+      top: 70px;
+      box-shadow: 0 0 0 35px rgba(214,179,106,.025),
+                  0 0 0 75px rgba(214,179,106,.02);
+      pointer-events: none;
     }
 
     .hero-content {
+      max-width: 760px;
       position: relative;
       z-index: 1;
-      max-width: 790px;
-      padding: 95px 0 110px;
+      padding: 100px 0 110px;
     }
 
     .eyebrow {
       color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
     }
 
-    h1 {
-      font-size: clamp(42px, 7vw, 78px);
-      line-height: 1.12;
-      letter-spacing: -2px;
-      margin: 24px 0;
-      font-weight: 700;
+    h1, h2, h3, p { margin-top: 0; }
+
+    .hero h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: clamp(44px, 7vw, 78px);
+      line-height: 1.08;
+      letter-spacing: -1px;
+      margin-bottom: 25px;
     }
 
-    h1 span { color: var(--gold); }
+    .hero h1 span { color: var(--gold); }
 
-    .hero p {
-      color: var(--muted);
-      font-size: clamp(16px, 2vw, 19px);
-      max-width: 620px;
-      line-height: 1.9;
+    .hero-description {
+      max-width: 610px;
+      color: #c4ccd6;
+      font-size: 17px;
+      margin-bottom: 32px;
     }
 
-    .actions {
+    .hero-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 35px;
+      gap: 13px;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 13px 23px;
-      border: 1px solid var(--gold);
-      border-radius: 3px;
-      font-weight: bold;
-      font-size: 14px;
-      transition: .2s;
-      cursor: pointer;
+    .hero-note {
+      margin-top: 50px;
+      color: #98a5b5;
+      font-size: 11px;
+      letter-spacing: 2px;
     }
 
-    .btn-primary {
-      background: var(--gold);
-      color: var(--navy);
+    .section { padding: 100px 0; }
+
+    .section-heading {
+      max-width: 720px;
+      margin-bottom: 45px;
     }
 
-    .btn-primary:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-    }
-
-    .btn-outline { color: var(--gold); }
-    .btn-outline:hover { background: rgba(215,181,109,.1); }
-
-    section { padding: 90px 0; }
-
-    .section-head {
-      max-width: 700px;
-      margin-bottom: 40px;
-    }
-
-    .section-head h2 {
-      font-size: clamp(30px, 4vw, 44px);
+    .section-heading h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      font-size: clamp(32px, 4vw, 48px);
       line-height: 1.2;
-      margin: 12px 0 18px;
+      margin-bottom: 17px;
     }
 
-    .section-head p,
-    .muted { color: var(--muted); }
+    .section-heading p {
+      color: var(--muted);
+      max-width: 650px;
+    }
 
     .about-grid {
       display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 55px;
+      grid-template-columns: 1fr 1fr;
+      gap: 65px;
       align-items: center;
     }
 
-    .about-copy p { color: var(--muted); }
-
-    .feature-panel {
-      border: 1px solid var(--line);
-      padding: 32px;
-      background: var(--panel);
-      position: relative;
+    .about-panel {
+      padding: 34px;
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg, #10243d, #09182b);
+      border-radius: var(--radius);
     }
 
-    .feature-panel::before {
-      content: "";
-      position: absolute;
-      top: -1px;
-      left: 28px;
-      right: 28px;
-      height: 2px;
-      background: var(--gold);
-    }
-
-    .feature-panel h3 {
+    .about-panel .monogram {
+      font-family: Georgia, serif;
       color: var(--gold);
-      font-size: 23px;
-      margin-top: 5px;
+      font-size: 46px;
+      margin-bottom: 12px;
     }
 
-    .feature-panel p { color: var(--muted); }
+    .about-panel h3 {
+      font-family: Georgia, serif;
+      font-weight: 400;
+      font-size: 27px;
+      margin-bottom: 14px;
+    }
 
-    .pillars { background: #09192c; }
+    .about-panel p { color: var(--muted); }
 
-    .cards {
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 25px 0 0;
+    }
+
+    .feature-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .feature-list li::before {
+      content: "✦";
+      color: var(--gold);
+    }
+
+    .leadership {
+      background: #09192c;
+      border-top: 1px solid rgba(214,179,106,.12);
+      border-bottom: 1px solid rgba(214,179,106,.12);
+    }
+
+    .leader-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, .8fr) 1.2fr;
+      gap: 65px;
+      align-items: center;
+    }
+
+    .portrait-frame {
+      position: relative;
+      max-width: 390px;
+      margin: 0 auto;
+      padding: 12px;
+      border: 1px solid var(--gold);
+      border-radius: 170px 170px 16px 16px;
+      background: linear-gradient(180deg, rgba(214,179,106,.1), transparent);
+    }
+
+    .portrait-frame img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      border-radius: 160px 160px 9px 9px;
+      background: var(--navy-light);
+    }
+
+    .portrait-fallback {
+      min-height: 420px;
+      border-radius: 160px 160px 9px 9px;
+      background: var(--navy-light);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: var(--gold);
+      text-align: center;
+      padding: 24px;
+    }
+
+    .portrait-fallback .monogram {
+      font-family: Georgia, serif;
+      font-size: 65px;
+    }
+
+    .portrait-fallback small {
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .leader-copy h2 {
+      font-family: Georgia, serif;
+      font-size: clamp(32px, 4vw, 46px);
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+
+    .leader-role {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 25px;
+    }
+
+    .leader-copy p { color: var(--muted); }
+
+    .focus-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
     }
 
-    .card {
-      border: 1px solid var(--line);
-      padding: 29px 25px;
-      background: var(--panel);
-      transition: .25s;
+    .focus-card {
+      padding: 30px 25px;
+      background: var(--navy-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: transform .25s, border-color .25s;
     }
 
-    .card:hover {
+    .focus-card:hover {
+      transform: translateY(-5px);
       border-color: var(--gold);
-      transform: translateY(-4px);
     }
 
-    .card .number {
-      font-size: 13px;
-      letter-spacing: 2px;
+    .focus-icon {
+      font-size: 27px;
+      margin-bottom: 18px;
       color: var(--gold);
     }
 
-    .card h3 { font-size: 21px; margin: 17px 0 10px; }
-    .card p { color: var(--muted); font-size: 14px; }
+    .focus-card h3 {
+      font-size: 19px;
+      margin-bottom: 12px;
+    }
+
+    .focus-card p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 0;
+    }
 
     .membership {
       background:
-        radial-gradient(ellipse at 50% 0%, rgba(215,181,109,.1), transparent 60%);
+        radial-gradient(ellipse at 50% 100%, rgba(214,179,106,.10), transparent 55%),
+        #09192c;
     }
+
+    .membership-inner {
+      max-width: 850px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .membership-inner .section-heading { margin: 0 auto 35px; }
+    .membership-inner .section-heading p { margin: 0 auto; }
 
     .membership-box {
-      border: 1px solid var(--line);
-      padding: clamp(28px, 6vw, 65px);
-      text-align: center;
-      background: rgba(255,255,255,.025);
-    }
-
-    .membership-box h2 {
-      font-size: clamp(30px, 4vw, 45px);
-      margin: 12px 0;
-    }
-
-    .membership-box p {
-      max-width: 650px;
-      margin: 0 auto;
-      color: var(--muted);
-    }
-
-    .membership-box .actions { justify-content: center; }
-
-    .founder-grid {
-      display: grid;
-      grid-template-columns: .75fr 1.25fr;
-      align-items: center;
-      gap: 55px;
-    }
-
-    .portrait {
-      min-height: 350px;
-      border: 1px solid var(--line);
-      background:
-        radial-gradient(ellipse at center, rgba(215,181,109,.13), transparent 65%),
-        #0b1b30;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 25px;
-      color: var(--gold);
-    }
-
-    .portrait img {
-      width: 100%;
-      max-height: 430px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .portrait .placeholder {
-      font-size: 64px;
       border: 1px solid var(--gold);
-      border-radius: 50%;
-      width: 105px;
-      height: 105px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 20px;
+      border-radius: var(--radius);
+      padding: 35px;
+      background: rgba(7,20,38,.65);
     }
 
-    .portrait small {
-      color: var(--muted);
-      display: block;
-      margin-top: 8px;
-      font-size: 12px;
+    .membership-box h3 {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      font-weight: 400;
     }
 
-    .founder-copy p { color: var(--muted); }
-
-    .contact {
-      background: #09192c;
-      border-top: 1px solid var(--line);
-    }
+    .membership-box p { color: var(--muted); }
 
     .contact-grid {
       display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 55px;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-family: Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+    }
+
+    .contact-info p { color: var(--muted); }
+
+    .contact-item {
+      margin-top: 25px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-item strong {
+      display: block;
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .contact-form {
+      padding: 30px;
+      background: var(--navy-light);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .form-row {
+      display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 35px;
+      gap: 15px;
     }
 
-    .contact-panel {
-      border: 1px solid var(--line);
-      padding: 28px;
-      background: var(--panel);
+    .field { margin-bottom: 17px; }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      color: #d9dfe7;
+      margin-bottom: 7px;
     }
 
-    .contact-panel h3 { color: var(--gold); }
-    .contact-panel p { color: var(--muted); }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      background: #071426;
+      border: 1px solid rgba(214,179,106,.25);
+      border-radius: 7px;
+      padding: 12px;
+      color: var(--white);
+      outline: none;
+    }
 
-    .contact-note {
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .field textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .form-note {
+      color: #9eabb9;
+      font-size: 11px;
+      margin: 14px 0 0;
+    }
+
+    .form-status {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--gold-light);
       font-size: 13px;
-      border-left: 2px solid var(--gold);
-      padding-left: 12px;
-      color: var(--muted);
-    }
-
-    [dir="rtl"] .contact-note {
-      border-left: 0;
-      border-right: 2px solid var(--gold);
-      padding-left: 0;
-      padding-right: 12px;
     }
 
     footer {
-      border-top: 1px solid var(--line);
-      padding: 25px 0;
-      color: var(--muted);
-      font-size: 12px;
+      padding: 30px 0;
+      background: #050d19;
+      border-top: 1px solid var(--border);
     }
 
     .footer-inner {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: 20px;
       flex-wrap: wrap;
     }
 
-    [dir="rtl"] body { text-align: right; }
-    [dir="rtl"] .eyebrow { letter-spacing: 0; }
-    [dir="rtl"] h1 { letter-spacing: 0; }
-    [dir="rtl"] .brand { letter-spacing: 3px; }
+    .footer-copy {
+      color: #8f9baa;
+      font-size: 12px;
+    }
 
-    @media (max-width: 900px) {
-      .nav { flex-wrap: wrap; padding: 15px 0; }
-      .navlinks { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
-      .about-grid, .founder-grid { grid-template-columns: 1fr; gap: 30px; }
-      .cards { grid-template-columns: repeat(2, 1fr); }
-      .portrait { min-height: 280px; }
+    .footer-brand {
+      color: var(--gold);
+      letter-spacing: 3px;
+      font-family: Georgia, serif;
+    }
+
+    body[dir="rtl"] .brand-name { letter-spacing: 1px; }
+    body[dir="rtl"] .brand-subtitle { letter-spacing: 0; }
+    body[dir="rtl"] .eyebrow { letter-spacing: 1px; }
+    body[dir="rtl"] .leader-role { letter-spacing: 1px; }
+    body[dir="rtl"] .hero::before { right: auto; left: -150px; }
+
+    @media (max-width: 950px) {
+      .menu-toggle { display: block; }
+
+      nav {
+        display: none;
+        position: absolute;
+        top: 82px;
+        left: 0;
+        right: 0;
+        padding: 22px 5%;
+        background: #071426;
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+
+      nav.open { display: flex; }
+      nav a { padding: 5px 0; }
+
+      .about-grid, .leader-grid, .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 35px;
+      }
+
+      .leader-grid { max-width: 700px; margin: 0 auto; }
+      .leader-copy { text-align: center; }
+      .focus-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { gap: 30px; }
     }
 
     @media (max-width: 600px) {
-      .container { width: 91%; }
-      .hero { min-height: 540px; }
-      .hero-content { padding: 70px 0; }
-      h1 { letter-spacing: -1px; }
-      section { padding: 65px 0; }
-      .cards, .contact-grid { grid-template-columns: 1fr; }
-      .navlinks { gap: 13px; font-size: 12px; }
-      .brand { font-size: 22px; }
-      .feature-panel { padding: 25px; }
-      .footer-inner { flex-direction: column; }
+      .container { width: 90%; }
+      .navbar { min-height: 72px; gap: 8px; }
+      .brand { gap: 8px; }
+      .brand-mark { width: 36px; height: 36px; font-size: 21px; }
+      .brand-name { font-size: 17px; letter-spacing: 2px; }
+      .brand-subtitle { font-size: 8px; letter-spacing: 1px; }
+      .nav-actions { gap: 6px; }
+      .language-select { padding: 8px 5px; font-size: 11px; }
+      nav { top: 72px; }
+
+      .hero { min-height: 570px; }
+      .hero-content { padding: 75px 0; }
+      .hero h1 { font-size: 48px; }
+      .hero-description { font-size: 15px; }
+      .hero-note { margin-top: 35px; }
+
+      .section { padding: 70px 0; }
+      .about-panel { padding: 25px; }
+      .focus-grid { grid-template-columns: 1fr; }
+      .portrait-frame { max-width: 310px; }
+      .portrait-frame img, .portrait-fallback { height: 350px; min-height: 350px; }
+      .membership-box, .contact-form { padding: 22px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .btn { padding: 12px 17px; }
     }
   </style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="container nav">
-      <a class="brand" href="#home" aria-label="NEXORA home">
-        NEXORA
-        <small>BUSINESS CLUB</small>
+  <div class="announcement" data-i18n="announcement">
+    A NEW STANDARD FOR CONNECTION, COLLABORATION & GROWTH
+  </div>
+
+  <header>
+    <div class="container navbar">
+      <a class="brand" href="#home" aria-label="NEXORA Home">
+        <span class="brand-mark">N</span>
+        <span>
+          <span class="brand-name">NEXORA</span>
+          <span class="brand-subtitle" data-i18n="brandSubtitle">BUSINESS CLUB</span>
+        </span>
       </a>
 
-      <nav class="navlinks" aria-label="Main navigation">
+      <nav id="mainNav">
+        <a href="#home" data-i18n="navHome">Home</a>
         <a href="#about" data-i18n="navAbout">About</a>
-        <a href="#pillars" data-i18n="navPillars">Our Focus</a>
-        <a href="#membership" data-i18n="navMembership">Membership</a>
         <a href="#leadership" data-i18n="navLeadership">Leadership</a>
+        <a href="#focus" data-i18n="navFocus">Our Focus</a>
+        <a href="#membership" data-i18n="navMembership">Membership</a>
         <a href="#contact" data-i18n="navContact">Contact</a>
       </nav>
 
-      <div class="languages" aria-label="Choose language">
-        <button class="active" type="button" data-lang="en">EN</button>
-        <button type="button" data-lang="ar">العربية</button>
-        <button type="button" data-lang="fa">فارسی</button>
+      <div class="nav-actions">
+        <select id="languageSelect" class="language-select" aria-label="Choose language">
+          <option value="en">EN</option>
+          <option value="ar">العربية</option>
+          <option value="fa">فارسی</option>
+        </select>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       </div>
     </div>
-  </div>
+  </header>
 
   <main>
     <section class="hero" id="home">
       <div class="container">
         <div class="hero-content">
-          <div class="eyebrow" data-i18n="eyebrow">A NEW STANDARD OF CONNECTION</div>
+          <div class="eyebrow" data-i18n="heroEyebrow">WELCOME TO NEXORA</div>
           <h1>
             <span data-i18n="heroLine1">Connect.</span><br>
-            <span data-i18n="heroLine2">Grow.</span>
+            <span data-i18n="heroLine2">Grow.</span><br>
             <span data-i18n="heroLine3">Lead.</span>
           </h1>
-          <p data-i18n="heroText">
-            A private business community bringing ambitious people together
-            to exchange ideas, build meaningful relationships and explore new opportunities.
+          <p class="hero-description" data-i18n="heroDescription">
+            A business club built to bring ambitious people together, create meaningful relationships, and open doors to new opportunities.
           </p>
-          <div class="actions">
-            <a class="btn btn-primary" href="#membership" data-i18n="heroButton1">Explore Membership</a>
+          <div class="hero-buttons">
+            <a class="btn btn-gold" href="#membership" data-i18n="heroButton1">Explore Membership ↗</a>
             <a class="btn btn-outline" href="#about" data-i18n="heroButton2">Discover NEXORA</a>
           </div>
+          <div class="hero-note" data-i18n="heroNote">PEOPLE · IDEAS · OPPORTUNITIES</div>
         </div>
       </div>
     </section>
 
-    <section id="about">
+    <section class="section" id="about">
       <div class="container about-grid">
-        <div class="about-copy">
+        <div class="section-heading">
           <div class="eyebrow" data-i18n="aboutEyebrow">WHO WE ARE</div>
-          <div class="section-head">
-            <h2 data-i18n="aboutTitle">Where ambition meets opportunity.</h2>
-            <p data-i18n="aboutText">
-              NEXORA Business Club is designed as a meeting point for entrepreneurs,
-              professionals, investors and forward-thinking leaders. Our vision is to
-              encourage collaboration, knowledge exchange and relationships that create value.
-            </p>
-          </div>
+          <h2 data-i18n="aboutTitle">Where ambition meets opportunity.</h2>
+          <p data-i18n="aboutDescription">
+            NEXORA Business Club is designed to create a space where entrepreneurs, professionals and forward-thinking individuals can connect, exchange ideas and explore opportunities for growth.
+          </p>
+          <p data-i18n="aboutDescription2">
+            We believe that the right relationships can inspire new ideas, strengthen businesses and help people move forward with confidence.
+          </p>
         </div>
 
-        <div class="feature-panel">
-          <div class="eyebrow" data-i18n="visionLabel">OUR VISION</div>
-          <h3 data-i18n="visionTitle">A connected business future.</h3>
-          <p data-i18n="visionText">
-            We believe that the right conversation can open a new door.
-            NEXORA aims to create an environment where people, ideas and opportunities meet.
+        <div class="about-panel">
+          <div class="monogram">N.</div>
+          <h3 data-i18n="aboutPanelTitle">More than a network.</h3>
+          <p data-i18n="aboutPanelDescription">
+            A community focused on meaningful connections, shared knowledge and long-term collaboration.
           </p>
+          <ul class="feature-list">
+            <li data-i18n="feature1">Professional networking</li>
+            <li data-i18n="feature2">Business collaboration</li>
+            <li data-i18n="feature3">Knowledge and idea exchange</li>
+            <li data-i18n="feature4">New opportunities for growth</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <section class="pillars" id="pillars">
-      <div class="container">
-        <div class="section-head">
-          <div class="eyebrow" data-i18n="focusEyebrow">THE NEXORA EXPERIENCE</div>
-          <h2 data-i18n="focusTitle">Built around meaningful connections.</h2>
-          <p data-i18n="focusText">
-            A platform for learning, collaboration and discovering new possibilities.
-          </p>
-        </div>
-
-        <div class="cards">
-          <article class="card">
-            <div class="number">01 / CONNECT</div>
-            <h3 data-i18n="card1Title">Strategic Networking</h3>
-            <p data-i18n="card1Text">Meet professionals and entrepreneurs who value trust, shared knowledge and long-term relationships.</p>
-          </article>
-
-          <article class="card">
-            <div class="number">02 / EXCHANGE</div>
-            <h3 data-i18n="card2Title">Ideas & Knowledge</h3>
-            <p data-i18n="card2Text">Create space for conversations, practical insights and fresh perspectives across industries.</p>
-          </article>
-
-          <article class="card">
-            <div class="number">03 / DISCOVER</div>
-            <h3 data-i18n="card3Title">New Opportunities</h3>
-            <p data-i18n="card3Text">Explore potential partnerships, collaborations and pathways for sustainable growth.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="membership" id="membership">
-      <div class="container">
-        <div class="membership-box">
-          <div class="eyebrow" data-i18n="memberEyebrow">YOUR NEXT CHAPTER</div>
-          <h2 data-i18n="memberTitle">Be part of the conversation.</h2>
-          <p data-i18n="memberText">
-            Interested in joining the NEXORA community? Get in touch to learn about
-            membership opportunities, upcoming initiatives and ways to participate.
-          </p>
-          <div class="actions">
-            <a href="#contact" class="btn btn-primary" data-i18n="memberButton">Request Information</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="leadership">
-      <div class="container founder-grid">
-        <div class="portrait">
-          <!-- Add Dr. Barghbani's approved portrait as dr-barghbani.jpg
-               in the same repository folder when the image is available. -->
+    <section class="section leadership" id="leadership">
+      <div class="container leader-grid">
+        <div class="portrait-frame">
           <img
-            src="dr-barghbani.jpg"
-            alt="Dr. Barghbani"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+            id="doctorPortrait"
+            src="https://drbarghabani.com/wp-content/uploads/2024/07/IMG_2060-1-scaled.jpg"
+            alt="Dr. Mojtaba Barghabani"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            onerror="this.style.display='none';document.getElementById('portraitFallback').style.display='flex';"
           >
-          <div class="placeholder" style="display:none;">N</div>
-          <div class="portrait-caption" style="display:none;">
-            <strong data-i18n="portraitName">Dr. Barghbani</strong>
-            <small data-i18n="portraitNote">Portrait will appear here after the image is added.</small>
+          <div class="portrait-fallback" id="portraitFallback">
+            <div class="monogram">N</div>
+            <strong data-i18n="portraitName">Dr. Mojtaba Barghabani</strong>
+            <small data-i18n="portraitFallbackText">Portrait unavailable. Add the image to the website repository.</small>
           </div>
         </div>
 
-        <div class="founder-copy">
+        <div class="leader-copy">
           <div class="eyebrow" data-i18n="leaderEyebrow">LEADERSHIP</div>
-          <div class="section-head">
-            <h2 data-i18n="leaderTitle">People shape the future.</h2>
-            <p data-i18n="leaderText">
-              NEXORA is built around the belief that strong communities begin with
-              people who are willing to share experience, think boldly and work together.
-            </p>
-          </div>
-          <h3 style="color:var(--gold);" data-i18n="portraitName">Dr. Barghbani</h3>
-          <p data-i18n="leaderNote">
-            Leadership profile and biography will be added once the approved details are provided.
+          <h2 data-i18n="leaderName">Dr. Mojtaba Barghabani</h2>
+          <div class="leader-role" data-i18n="leaderRole">NEXORA BUSINESS CLUB</div>
+          <p data-i18n="leaderDescription">
+            NEXORA is built around the belief that strong professional relationships can create lasting value. The club aims to bring people together through connection, collaboration and a shared interest in progress.
           </p>
+          <p data-i18n="leaderDescription2">
+            Our goal is to create an environment where ideas can develop, relationships can grow and new opportunities can emerge.
+          </p>
+          <a href="#contact" class="btn btn-outline" data-i18n="leaderButton">Connect With NEXORA</a>
         </div>
       </div>
     </section>
 
-    <section class="contact" id="contact">
+    <section class="section" id="focus">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow" data-i18n="focusEyebrow">WHAT WE DO</div>
+          <h2 data-i18n="focusTitle">Connections with a purpose.</h2>
+          <p data-i18n="focusDescription">
+            A platform for people who value relationships, ideas and opportunities that can lead to meaningful progress.
+          </p>
+        </div>
+
+        <div class="focus-grid">
+          <article class="focus-card">
+            <div class="focus-icon">✧</div>
+            <h3 data-i18n="focus1Title">Networking</h3>
+            <p data-i18n="focus1Description">Build professional relationships and connect with people who share your ambition.</p>
+          </article>
+
+          <article class="focus-card">
+            <div class="focus-icon">◇</div>
+            <h3 data-i18n="focus2Title">Collaboration</h3>
+            <p data-i18n="focus2Description">Discover common goals and explore opportunities to work together.</p>
+          </article>
+
+          <article class="focus-card">
+            <div class="focus-icon">↗</div>
+            <h3 data-i18n="focus3Title">Business Growth</h3>
+            <p data-i18n="focus3Description">Exchange insights and explore new directions for professional development.</p>
+          </article>
+
+          <article class="focus-card">
+            <div class="focus-icon">◎</div>
+            <h3 data-i18n="focus4Title">Community</h3>
+            <p data-i18n="focus4Description">Become part of a community that values trust, respect and shared progress.</p>
+          </article>
+
+          <article class="focus-card">
+            <div class="focus-icon">✦</div>
+            <h3 data-i18n="focus5Title">Ideas & Knowledge</h3>
+            <p data-i18n="focus5Description">Share perspectives, learn from others and discover fresh possibilities.</p>
+          </article>
+
+          <article class="focus-card">
+            <div class="focus-icon">⌘</div>
+            <h3 data-i18n="focus6Title">New Opportunities</h3>
+            <p data-i18n="focus6Description">Explore potential partnerships and professional connections for the future.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section membership" id="membership">
+      <div class="container membership-inner">
+        <div class="section-heading">
+          <div class="eyebrow" data-i18n="membershipEyebrow">BECOME A MEMBER</div>
+          <h2 data-i18n="membershipTitle">Your next connection could change everything.</h2>
+          <p data-i18n="membershipDescription">
+            If you value meaningful relationships, fresh ideas and new possibilities, we invite you to express your interest in joining NEXORA Business Club.
+          </p>
+        </div>
+
+        <div class="membership-box">
+          <h3 data-i18n="membershipBoxTitle">Start a conversation.</h3>
+          <p data-i18n="membershipBoxDescription">
+            Tell us a little about yourself and your professional interests.
+          </p>
+          <a class="btn btn-gold" href="#contact" data-i18n="membershipButton">Express Your Interest ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
       <div class="container contact-grid">
-        <div>
-          <div class="eyebrow" data-i18n="contactEyebrow">START A CONVERSATION</div>
-          <div class="section-head">
-            <h2 data-i18n="contactTitle">Let's build something meaningful.</h2>
-            <p data-i18n="contactText">
-              For membership enquiries, partnerships and general information,
-              connect with the NEXORA team.
-            </p>
+        <div class="contact-info">
+          <div class="eyebrow" data-i18n="contactEyebrow">GET IN TOUCH</div>
+          <h2 data-i18n="contactTitle">Let's connect.</h2>
+          <p data-i18n="contactDescription">
+            Interested in membership, collaboration or learning more about NEXORA? Send us a message.
+          </p>
+
+          <div class="contact-item">
+            <strong data-i18n="contactLabel1">MEMBERSHIP & PARTNERSHIPS</strong>
+            <span data-i18n="contactValue1">Use the inquiry form to get started.</span>
+          </div>
+
+          <div class="contact-item">
+            <strong data-i18n="contactLabel2">LOCATION</strong>
+            <span data-i18n="contactValue2">Contact us for current club information.</span>
           </div>
         </div>
 
-        <div class="contact-panel">
-          <h3 data-i18n="contactPanelTitle">Connect with NEXORA</h3>
-          <p data-i18n="contactPanelText">
-            Official contact details will be published here once confirmed.
+        <form class="contact-form" id="inquiryForm">
+          <div class="form-row">
+            <div class="field">
+              <label for="fullName" data-i18n="formNameLabel">Full name</label>
+              <input id="fullName" name="fullName" type="text" required autocomplete="name" data-i18n-placeholder="formNamePlaceholder" placeholder="Your name">
+            </div>
+            <div class="field">
+              <label for="email" data-i18n="formEmailLabel">Email address</label>
+              <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="interest" data-i18n="formInterestLabel">I'm interested in</label>
+            <select id="interest" name="interest" required>
+              <option value="" data-i18n="formChooseOption">Choose an option</option>
+              <option value="membership" data-i18n="formMembershipOption">Membership</option>
+              <option value="partnership" data-i18n="formPartnershipOption">Business partnership</option>
+              <option value="events" data-i18n="formEventsOption">Events and networking</option>
+              <option value="other" data-i18n="formOtherOption">Other inquiry</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message" data-i18n="formMessageLabel">Message</label>
+            <textarea id="message" name="message" required data-i18n-placeholder="formMessagePlaceholder" placeholder="Tell us about your interests..."></textarea>
+          </div>
+
+          <button class="btn btn-gold" type="submit" data-i18n="formSubmit">Prepare inquiry</button>
+
+          <p class="form-note" data-i18n="formNote">
+            This demo form is not connected to an inbox yet. Submitting it will not send or store your information.
           </p>
-          <p class="contact-note" data-i18n="contactNote">
-            This website is an initial version. Contact links and membership requests
-            will be activated after the official details are added.
-          </p>
-          <a class="btn btn-outline" href="#home" data-i18n="backTop">Back to top ↑</a>
-        </div>
+          <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+        </form>
       </div>
     </section>
   </main>
 
   <footer>
     <div class="container footer-inner">
-      <span>© <span id="year">2026</span> NEXORA Business Club</span>
-      <span data-i18n="footerText">Connect. Grow. Lead.</span>
+      <div class="footer-brand">NEXORA</div>
+      <div class="footer-copy">
+        © <span id="year"></span> NEXORA Business Club.
+        <span data-i18n="footerRights">All rights reserved.</span>
+      </div>
+      <a href="#home" class="gold" data-i18n="backToTop">Back to top ↑</a>
     </div>
   </footer>
 
   <script>
     const translations = {
       en: {
-        title: "NEXORA Business Club | Connect. Grow. Lead.",
-        navAbout: "About", navPillars: "Our Focus",
-        navMembership: "Membership", navLeadership: "Leadership",
-        navContact: "Contact",
-        eyebrow: "A NEW STANDARD OF CONNECTION",
+        announcement: "A NEW STANDARD FOR CONNECTION, COLLABORATION & GROWTH",
+        brandSubtitle: "BUSINESS CLUB",
+        navHome: "Home", navAbout: "About", navLeadership: "Leadership",
+        navFocus: "Our Focus", navMembership: "Membership", navContact: "Contact",
+        heroEyebrow: "WELCOME TO NEXORA",
         heroLine1: "Connect.", heroLine2: "Grow.", heroLine3: "Lead.",
-        heroText: "A private business community bringing ambitious people together to exchange ideas, build meaningful relationships and explore new opportunities.",
-        heroButton1: "Explore Membership", heroButton2: "Discover NEXORA",
+        heroDescription: "A business club built to bring ambitious people together, create meaningful relationships, and open doors to new opportunities.",
+        heroButton1: "Explore Membership ↗", heroButton2: "Discover NEXORA",
+        heroNote: "PEOPLE · IDEAS · OPPORTUNITIES",
         aboutEyebrow: "WHO WE ARE",
         aboutTitle: "Where ambition meets opportunity.",
-        aboutText: "NEXORA Business Club is designed as a meeting point for entrepreneurs, professionals, investors and forward-thinking leaders. Our vision is to encourage collaboration, knowledge exchange and relationships that create value.",
-        visionLabel: "OUR VISION", visionTitle: "A connected business future.",
-        visionText: "We believe that the right conversation can open a new door. NEXORA aims to create an environment where people, ideas and opportunities meet.",
-        focusEyebrow: "THE NEXORA EXPERIENCE",
-        focusTitle: "Built around meaningful connections.",
-        focusText: "A platform for learning, collaboration and discovering new possibilities.",
-        card1Title: "Strategic Networking",
-        card1Text: "Meet professionals and entrepreneurs who value trust, shared knowledge and long-term relationships.",
-        card2Title: "Ideas & Knowledge",
-        card2Text: "Create space for conversations, practical insights and fresh perspectives across industries.",
-        card3Title: "New Opportunities",
-        card3Text: "Explore potential partnerships, collaborations and pathways for sustainable growth.",
-        memberEyebrow: "YOUR NEXT CHAPTER",
-        memberTitle: "Be part of the conversation.",
-        memberText: "Interested in joining the NEXORA community? Get in touch to learn about membership opportunities, upcoming initiatives and ways to participate.",
-        memberButton: "Request Information",
-        leaderEyebrow: "LEADERSHIP",
-        leaderTitle: "People shape the future.",
-        leaderText: "NEXORA is built around the belief that strong communities begin with people who are willing to share experience, think boldly and work together.",
-        portraitName: "Dr. Barghbani",
-        portraitNote: "Portrait will appear here after the image is added.",
-        leaderNote: "Leadership profile and biography will be added once the approved details are provided.",
-        contactEyebrow: "START A CONVERSATION",
-        contactTitle: "Let's build something meaningful.",
-        contactText: "For membership enquiries, partnerships and general information, connect with the NEXORA team.",
-        contactPanelTitle: "Connect with NEXORA",
-        contactPanelText: "Official contact details will be published here once confirmed.",
-        contactNote: "This website is an initial version. Contact links and membership requests will be activated after the official details are added.",
-        backTop: "Back to top ↑", footerText: "Connect. Grow. Lead."
-      },
-
-      ar: {
-        title: "نكسورا نادي الأعمال | تواصل، تطور، تقدّم",
-        navAbout: "من نحن", navPillars: "مجالاتنا",
-        navMembership: "العضوية", navLeadership: "القيادة",
-        navContact: "اتصل بنا",
-        eyebrow: "معيار جديد للتواصل",
-        heroLine1: "تواصل.", heroLine2: "تطوّر.", heroLine3: "تقدّم.",
-        heroText: "مجتمع أعمال يجمع أصحاب الطموح لتبادل الأفكار وبناء علاقات هادفة واستكشاف فرص جديدة.",
-        heroButton1: "اكتشف العضوية", heroButton2: "اكتشف نكسورا",
-        aboutEyebrow: "من نحن",
-        aboutTitle: "حيث يلتقي الطموح بالفرص.",
-        aboutText: "يهدف نادي نكسورا للأعمال إلى أن يكون ملتقى لرواد الأعمال والمهنيين والمستثمرين والقادة ذوي الرؤية المستقبلية. نسعى إلى تشجيع التعاون وتبادل المعرفة وبناء علاقات تحقق قيمة حقيقية.",
-        visionLabel: "رؤيتنا", visionTitle: "مستقبل أعمال أكثر ترابطاً.",
-        visionText: "نؤمن بأن الحوار المناسب قد يفتح باباً جديداً. ونسعى إلى توفير بيئة تلتقي فيها العقول والأفكار والفرص.",
-        focusEyebrow: "تجربة نكسورا",
-        focusTitle: "روابط ذات معنى.",
-        focusText: "مساحة للتعلّم والتعاون واكتشاف إمكانيات جديدة.",
-        card1Title: "علاقات استراتيجية",
-        card1Text: "التواصل مع مهنيين ورواد أعمال يقدّرون الثقة والمعرفة المشتركة والعلاقات طويلة الأمد.",
-        card2Title: "الأفكار والمعرفة",
-        card2Text: "إتاحة مساحة للحوار والرؤى العملية ووجهات النظر الجديدة عبر مختلف القطاعات.",
-        card3Title: "فرص جديدة",
-        card3Text: "استكشاف الشراكات والتعاون والمسارات الداعمة للنمو المستدام.",
-        memberEyebrow: "خطوتك القادمة",
-        memberTitle: "كن جزءاً من الحوار.",
-        memberText: "هل ترغب في الانضمام إلى مجتمع نكسورا؟ تواصل معنا لمعرفة فرص العضوية والمبادرات القادمة وطرق المشاركة.",
-        memberButton: "طلب المعلومات",
-        leaderEyebrow: "القيادة",
-        leaderTitle: "الإنسان يصنع المستقبل.",
-        leaderText: "ينطلق نكسورا من الإيمان بأن المجتمعات القوية تبدأ بأشخاص يشاركون خبراتهم ويفكرون بطموح ويعملون معاً.",
-        portraitName: "الدكتور برقباني",
-        portraitNote: "ستظهر الصورة هنا بعد إضافة الملف.",
-        leaderNote: "ستُضاف السيرة التعريفية والمعلومات القيادية بعد تأكيد التفاصيل الرسمية.",
-        contactEyebrow: "لنبدأ الحوار",
-        contactTitle: "لنبنِ شيئاً ذا قيمة.",
-        contactText: "للاستفسارات حول العضوية والشراكات والمعلومات العامة، تواصل مع فريق نكسورا.",
-        contactPanelTitle: "تواصل مع نكسورا",
-        contactPanelText: "ستُنشر معلومات الاتصال الرسمية هنا بعد تأكيدها.",
-        contactNote: "هذه نسخة أولية من الموقع. ستُفعّل روابط الاتصال وطلبات العضوية بعد إضافة التفاصيل الرسمية.",
-        backTop: "العودة إلى الأعلى ↑", footerText: "تواصل. تطوّر. تقدّم."
+        aboutDescription: "NEXORA Business Club is designed to create a space where entrepreneurs, professionals and forward-thinking individuals can connect, exchange ideas and explore opportunities for growth.",
+        aboutDescription2: "We believe that the right relationships can inspire new ideas, strengthen businesses and help people move forward with confidence.",
+        aboutPanelTitle: "More than a network.",
+        aboutPanelDescription: "A community focused on meaningful connections, shared knowledge and long-term collaboration.",
+        feature1: "Professional networking", feature2: "Business collaboration",
+        feature3: "Knowledge and idea exchange", feature4: "New opportunities for growth",
+        leaderEyebrow: "LEADERSHIP", leaderName: "Dr. Mojtaba Barghabani",
+        leaderRole: "NEXORA BUSINESS CLUB",
+        leaderDescription: "NEXORA is built around the belief that strong professional relationships can create lasting value. The club aims to bring people together through connection, collaboration and a shared interest in progress.",
+        leaderDescription2: "Our goal is to create an environment where ideas can develop, relationships can grow and new opportunities can emerge.",
+        leaderButton: "Connect With NEXORA",
+        portraitName: "Dr. Mojtaba Barghabani",
+        portraitFallbackText: "Portrait unavailable. Add the image to the website repository.",
+        focusEyebrow: "WHAT WE DO", focusTitle: "Connections with a purpose.",
+        focusDescription: "A platform for people who value relationships, ideas and opportunities that can lead to meaningful progress.",
+        focus1Title: "Networking", focus1Description: "Build professional relationships and connect with people who share your ambition.",
+        focus2Title: "Collaboration", focus2Description: "Discover common goals and explore opportunities to work together.",
+        focus3Title: "Business Growth", focus3Description: "Exchange insights and explore new directions for professional development.",
+        focus4Title: "Community", focus4Description: "Become part of a community that values trust, respect and shared progress.",
+        focus5Title: "Ideas & Knowledge", focus5Description: "Share perspectives, learn from others and discover fresh possibilities.",
+        focus6Title: "New Opportunities", focus6Description: "Explore potential partnerships and professional connections for the future.",
+        membershipEyebrow: "BECOME A MEMBER",
+        membershipTitle: "Your next connection could change everything.",
+        membershipDescription: "If you value meaningful relationships, fresh ideas and new possibilities, we invite you to express your interest in joining NEXORA Business Club.",
+        membershipBoxTitle: "Start a conversation.",
+        membershipBoxDescription: "Tell us a little about yourself and your professional interests.",
+        membershipButton: "Express Your Interest ↗",
+        contactEyebrow: "GET IN TOUCH", contactTitle: "Let's connect.",
+        contactDescription: "Interested in membership, collaboration or learning more about NEXORA? Send us a message.",
+        contactLabel1: "MEMBERSHIP & PARTNERSHIPS",
+        contactValue1: "Use the inquiry form to get started.",
+        contactLabel2: "LOCATION",
+        contactValue2: "Contact us for current club information.",
+        formNameLabel: "Full name", formNamePlaceholder: "Your name",
+        formEmailLabel: "Email address", formInterestLabel: "I'm interested in",
+        formChooseOption: "Choose an option", formMembershipOption: "Membership",
+        formPartnershipOption: "Business partnership", formEventsOption: "Events and networking",
+        formOtherOption: "Other inquiry", formMessageLabel: "Message",
+        formMessagePlaceholder: "Tell us about your interests...",
+        formSubmit: "Prepare inquiry",
+        formNote: "This demo form is not connected to an inbox yet. Submitting it will not send or store your information.",
+        formStatus: "This demo is not connected to an email service yet. Your information has not been sent. Please connect a form service before accepting real inquiries.",
+        footerRights: "All rights reserved.", backToTop: "Back to top ↑"
       },
 
       fa: {
-        title: "باشگاه کسب‌وکار نکسورا | ارتباط، رشد، رهبری",
-        navAbout: "درباره ما", navPillars: "حوزه‌های فعالیت",
-        navMembership: "عضویت", navLeadership: "مدیریت",
-        navContact: "ارتباط با ما",
-        eyebrow: "استانداردی تازه برای ارتباط",
+        announcement: "استانداردی تازه برای ارتباط، همکاری و رشد",
+        brandSubtitle: "باشگاه کسب‌وکار",
+        navHome: "خانه", navAbout: "درباره ما", navLeadership: "مدیریت",
+        navFocus: "حوزه فعالیت", navMembership: "عضویت", navContact: "تماس",
+        heroEyebrow: "به نکـسورا خوش آمدید",
         heroLine1: "ارتباط.", heroLine2: "رشد.", heroLine3: "رهبری.",
-        heroText: "جامعه‌ای برای فعالان کسب‌وکار که با هدف تبادل ایده، ساخت روابط ارزشمند و کشف فرصت‌های جدید گرد هم می‌آیند.",
-        heroButton1: "آشنایی با عضویت", heroButton2: "درباره نکسورا",
+        heroDescription: "باشگاهی برای گردهم‌آوردن افراد بلندپرواز، ایجاد ارتباطات ارزشمند و گشودن مسیرهای تازه برای همکاری و پیشرفت.",
+        heroButton1: "آشنایی با عضویت ↗", heroButton2: "درباره نکـسورا",
+        heroNote: "افراد · ایده‌ها · فرصت‌ها",
         aboutEyebrow: "ما که هستیم",
-        aboutTitle: "جایی که جاه‌طلبی با فرصت روبه‌رو می‌شود.",
-        aboutText: "باشگاه کسب‌وکار نکسورا فضایی برای کارآفرینان، متخصصان، سرمایه‌گذاران و مدیران آینده‌نگر است. چشم‌انداز ما تقویت همکاری، تبادل دانش و ایجاد ارتباطاتی ارزشمند است.",
-        visionLabel: "چشم‌انداز ما", visionTitle: "آینده‌ای با ارتباطات گسترده‌تر.",
-        visionText: "باور داریم یک گفت‌وگوی درست می‌تواند دری تازه باز کند. نکسورا می‌خواهد محیطی ایجاد کند که افراد، ایده‌ها و فرصت‌ها در آن به هم برسند.",
-        focusEyebrow: "تجربه نکسورا",
-        focusTitle: "بر پایه ارتباطات ارزشمند.",
-        focusText: "فضایی برای یادگیری، همکاری و کشف امکان‌های تازه.",
-        card1Title: "شبکه‌سازی راهبردی",
-        card1Text: "ارتباط با متخصصان و کارآفرینانی که برای اعتماد، دانش مشترک و روابط بلندمدت ارزش قائل‌اند.",
-        card2Title: "ایده و دانش",
-        card2Text: "فراهم‌کردن فضایی برای گفت‌وگو، بینش‌های کاربردی و دیدگاه‌های تازه در حوزه‌های گوناگون.",
-        card3Title: "فرصت‌های تازه",
-        card3Text: "بررسی امکان مشارکت، همکاری و مسیرهای رشد پایدار.",
-        memberEyebrow: "فصل بعدی شما",
-        memberTitle: "بخشی از این گفت‌وگو باشید.",
-        memberText: "برای پیوستن به جامعه نکسورا علاقه‌مندید؟ جهت آشنایی با شرایط عضویت، برنامه‌های پیش‌رو و روش مشارکت با ما در ارتباط باشید.",
-        memberButton: "درخواست اطلاعات",
-        leaderEyebrow: "مدیریت",
-        leaderTitle: "آینده را انسان‌ها می‌سازند.",
-        leaderText: "نکسورا بر این باور است که جوامع قدرتمند با افرادی شکل می‌گیرند که تجربه خود را به اشتراک می‌گذارند، جسورانه می‌اندیشند و با هم همکاری می‌کنند.",
-        portraitName: "دکتر برقبانی",
-        portraitNote: "پس از افزودن فایل تصویر، عکس در این قسمت نمایش داده می‌شود.",
-        leaderNote: "زندگی‌نامه و اطلاعات مدیریتی پس از تأیید جزئیات رسمی اضافه خواهد شد.",
-        contactEyebrow: "گفت‌وگو را آغاز کنیم",
-        contactTitle: "چیزی ارزشمند بسازیم.",
-        contactText: "برای پرسش‌های عضویت، همکاری و اطلاعات عمومی با تیم نکسورا در ارتباط باشید.",
-        contactPanelTitle: "ارتباط با نکسورا",
-        contactPanelText: "اطلاعات رسمی تماس پس از تأیید در این قسمت منتشر می‌شود.",
-        contactNote: "این نسخه اولیه وب‌سایت است. لینک‌های تماس و درخواست عضویت پس از افزودن اطلاعات رسمی فعال خواهند شد.",
-        backTop: "بازگشت به بالا ↑", footerText: "ارتباط. رشد. رهبری."
+        aboutTitle: "جایی که بلندپروازی به فرصت می‌رسد.",
+        aboutDescription: "باشگاه کسب‌وکار نکـسورا فضایی برای ارتباط کارآفرینان، متخصصان و افراد آینده‌نگر فراهم می‌کند تا ایده‌های خود را به اشتراک بگذارند و فرصت‌های رشد را بررسی کنند.",
+        aboutDescription2: "ما باور داریم ارتباطات درست می‌توانند الهام‌بخش ایده‌های تازه باشند، کسب‌وکارها را تقویت کنند و مسیر پیشرفت را هموار سازند.",
+        aboutPanelTitle: "فراتر از یک شبکه ارتباطی",
+        aboutPanelDescription: "جامعه‌ای متمرکز بر ارتباطات معنادار، تبادل دانش و همکاری بلندمدت.",
+        feature1: "شبکه‌سازی حرفه‌ای", feature2: "همکاری‌های تجاری",
+        feature3: "تبادل دانش و ایده", feature4: "فرصت‌های تازه برای رشد",
+        leaderEyebrow: "مدیریت", leaderName: "دکتر مجتبی برقبانی",
+        leaderRole: "باشگاه کسب‌وکار نکـسورا",
+        leaderDescription: "نکـسورا بر این باور استوار است که ارتباطات حرفه‌ای قدرتمند می‌توانند ارزش ماندگار ایجاد کنند. هدف باشگاه، نزدیک‌کردن افراد از طریق ارتباط، همکاری و علاقه مشترک به پیشرفت است.",
+        leaderDescription2: "هدف ما ایجاد فضایی است که در آن ایده‌ها رشد کنند، ارتباطات گسترش یابند و فرصت‌های جدید شکل بگیرند.",
+        leaderButton: "ارتباط با نکـسورا",
+        portraitName: "دکتر مجتبی برقبانی",
+        portraitFallbackText: "تصویر در دسترس نیست. تصویر را به مخزن سایت اضافه کنید.",
+        focusEyebrow: "حوزه فعالیت ما", focusTitle: "ارتباطاتی هدفمند و ارزش‌آفرین",
+        focusDescription: "پلتفرمی برای افرادی که برای ارتباطات، ایده‌ها و فرصت‌های پیشرفت ارزش قائل‌اند.",
+        focus1Title: "شبکه‌سازی", focus1Description: "ارتباطات حرفه‌ای بسازید و با افرادی هم‌مسیر با اهداف خود آشنا شوید.",
+        focus2Title: "همکاری", focus2Description: "اهداف مشترک را شناسایی کنید و فرصت‌های همکاری را بررسی کنید.",
+        focus3Title: "رشد کسب‌وکار", focus3Description: "دانش و تجربه مبادله کنید و مسیرهای تازه توسعه حرفه‌ای را بشناسید.",
+        focus4Title: "جامعه حرفه‌ای", focus4Description: "عضو جامعه‌ای باشید که به اعتماد، احترام و پیشرفت مشترک اهمیت می‌دهد.",
+        focus5Title: "ایده و دانش", focus5Description: "دیدگاه‌های خود را به اشتراک بگذارید و از تجربه دیگران بیاموزید.",
+        focus6Title: "فرصت‌های جدید", focus6Description: "زمینه‌های همکاری و ارتباطات حرفه‌ای آینده را بررسی کنید.",
+        membershipEyebrow: "عضویت در باشگاه",
+        membershipTitle: "ارتباط بعدی شما می‌تواند مسیر تازه‌ای بسازد.",
+        membershipDescription: "اگر برای ارتباطات ارزشمند، ایده‌های نو و فرصت‌های تازه اهمیت قائل هستید، علاقه‌مندی خود را برای پیوستن به باشگاه کسب‌وکار نکـسورا اعلام کنید.",
+        membershipBoxTitle: "گفت‌وگو را آغاز کنیم.",
+        membershipBoxDescription: "کمی درباره خود و علایق حرفه‌ای‌تان برای ما بنویسید.",
+        membershipButton: "اعلام علاقه‌مندی ↗",
+        contactEyebrow: "با ما در ارتباط باشید", contactTitle: "با هم ارتباط بگیریم.",
+        contactDescription: "برای عضویت، همکاری یا کسب اطلاعات بیشتر درباره نکـسورا، پیام خود را ارسال کنید.",
+        contactLabel1: "عضویت و همکاری",
+        contactValue1: "برای شروع از فرم درخواست استفاده کنید.",
+        contactLabel2: "موقعیت",
+        contactValue2: "برای اطلاع از اطلاعات فعلی باشگاه با ما تماس بگیرید.",
+        formNameLabel: "نام و نام خانوادگی", formNamePlaceholder: "نام شما",
+        formEmailLabel: "آدرس ایمیل", formInterestLabel: "موضوع مورد علاقه",
+        formChooseOption: "یک گزینه انتخاب کنید", formMembershipOption: "عضویت",
+        formPartnershipOption: "همکاری تجاری", formEventsOption: "رویدادها و شبکه‌سازی",
+        formOtherOption: "سایر درخواست‌ها", formMessageLabel: "پیام",
+        formMessagePlaceholder: "درباره درخواست خود بنویسید...",
+        formSubmit: "آماده‌سازی درخواست",
+        formNote: "این فرم هنوز به صندوق ایمیل متصل نیست؛ با ارسال آن اطلاعات شما ارسال یا ذخیره نمی‌شود.",
+        formStatus: "این نسخه هنوز به سرویس ایمیل متصل نیست. اطلاعات شما ارسال نشده است. پیش از دریافت درخواست‌های واقعی باید سرویس فرم را متصل کنید.",
+        footerRights: "تمامی حقوق محفوظ است.", backToTop: "بازگشت به بالا ↑"
+      },
+
+      ar: {
+        announcement: "معيار جديد للتواصل والتعاون والنمو",
+        brandSubtitle: "نادي الأعمال",
+        navHome: "الرئيسية", navAbout: "من نحن", navLeadership: "القيادة",
+        navFocus: "مجالاتنا", navMembership: "العضوية", navContact: "اتصل بنا",
+        heroEyebrow: "مرحباً بكم في نكسورا",
+        heroLine1: "تواصل.", heroLine2: "تطوّر.", heroLine3: "قُد.",
+        heroDescription: "نادٍ للأعمال يجمع أصحاب الطموح لبناء علاقات قيّمة وفتح آفاق جديدة للتعاون والفرص.",
+        heroButton1: "اكتشف العضوية ↗", heroButton2: "اكتشف نكسورا",
+        heroNote: "الأشخاص · الأفكار · الفرص",
+        aboutEyebrow: "من نحن",
+        aboutTitle: "حيث يلتقي الطموح بالفرص.",
+        aboutDescription: "يهدف نادي نكسورا للأعمال إلى توفير مساحة تجمع رواد الأعمال والمهنيين وأصحاب الرؤى المستقبلية لتبادل الأفكار واستكشاف فرص النمو.",
+        aboutDescription2: "نؤمن بأن العلاقات المناسبة تلهم أفكاراً جديدة وتعزز الأعمال وتساعد الناس على التقدم بثقة.",
+        aboutPanelTitle: "أكثر من مجرد شبكة علاقات",
+        aboutPanelDescription: "مجتمع يركز على العلاقات الهادفة وتبادل المعرفة والتعاون طويل الأمد.",
+        feature1: "التواصل المهني", feature2: "التعاون التجاري",
+        feature3: "تبادل المعرفة والأفكار", feature4: "فرص جديدة للنمو",
+        leaderEyebrow: "القيادة", leaderName: "الدكتور مجتبى برقباني",
+        leaderRole: "نادي نكسورا للأعمال",
+        leaderDescription: "يقوم نكسورا على الإيمان بأن العلاقات المهنية القوية قادرة على خلق قيمة مستدامة. ويسعى النادي إلى جمع الأشخاص من خلال التواصل والتعاون والاهتمام المشترك بالتقدم.",
+        leaderDescription2: "هدفنا هو بناء بيئة تتطور فيها الأفكار وتنمو فيها العلاقات وتظهر من خلالها فرص جديدة.",
+        leaderButton: "تواصل مع نكسورا",
+        portraitName: "الدكتور مجتبى برقباني",
+        portraitFallbackText: "الصورة غير متاحة. أضف الصورة إلى مستودع الموقع.",
+        focusEyebrow: "ماذا نقدم", focusTitle: "علاقات ذات هدف.",
+        focusDescription: "منصة للأشخاص الذين يقدّرون العلاقات والأفكار والفرص التي تقود إلى التقدم.",
+        focus1Title: "التواصل المهني", focus1Description: "ابنِ علاقات مهنية وتواصل مع أشخاص يشاركونك الطموح.",
+        focus2Title: "التعاون", focus2Description: "اكتشف الأهداف المشتركة واستكشف فرص العمل معاً.",
+        focus3Title: "نمو الأعمال", focus3Description: "تبادل الخبرات واستكشف مسارات جديدة للتطور المهني.",
+        focus4Title: "المجتمع", focus4Description: "كن جزءاً من مجتمع يقدّر الثقة والاحترام والتقدم المشترك.",
+        focus5Title: "الأفكار والمعرفة", focus5Description: "شارك وجهات نظرك وتعلّم من الآخرين واكتشف إمكانات جديدة.",
+        focus6Title: "فرص جديدة", focus6Description: "استكشف الشراكات المحتملة والعلاقات المهنية المستقبلية.",
+        membershipEyebrow: "انضم إلينا",
+        membershipTitle: "قد تغيّر علاقتك القادمة كل شيء.",
+        membershipDescription: "إذا كنت تقدّر العلاقات الهادفة والأفكار الجديدة والفرص الواعدة، ندعوك للتعبير عن اهتمامك بالانضمام إلى نادي نكسورا للأعمال.",
+        membershipBoxTitle: "لنبدأ الحوار.",
+        membershipBoxDescription: "أخبرنا قليلاً عن نفسك واهتماماتك المهنية.",
+        membershipButton: "عبّر عن اهتمامك ↗",
+        contactEyebrow: "تواصل معنا", contactTitle: "لنتواصل.",
+        contactDescription: "هل ترغب في العضوية أو التعاون أو معرفة المزيد عن نكسورا؟ أرسل لنا رسالة.",
+        contactLabel1: "العضوية والشراكات",
+        contactValue1: "استخدم نموذج الاستفسار للبدء.",
+        contactLabel2: "الموقع",
+        contactValue2: "تواصل معنا للحصول على معلومات النادي الحالية.",
+        formNameLabel: "الاسم الكامل", formNamePlaceholder: "اسمك",
+        formEmailLabel: "البريد الإلكتروني", formInterestLabel: "أنا مهتم بـ",
+        formChooseOption: "اختر خياراً", formMembershipOption: "العضوية",
+        formPartnershipOption: "شراكة تجارية", formEventsOption: "الفعاليات والتواصل",
+        formOtherOption: "استفسار آخر", formMessageLabel: "الرسالة",
+        formMessagePlaceholder: "أخبرنا عن اهتماماتك...",
+        formSubmit: "إعداد الاستفسار",
+        formNote: "هذا النموذج التجريبي غير متصل بالبريد الإلكتروني بعد. لن يتم إرسال معلوماتك أو تخزينها عند الإرسال.",
+        formStatus: "هذا النموذج غير متصل بخدمة البريد الإلكتروني بعد. لم يتم إرسال معلوماتك. يجب ربط خدمة نماذج قبل استقبال الاستفسارات الحقيقية.",
+        footerRights: "جميع الحقوق محفوظة.", backToTop: "العودة إلى الأعلى ↑"
       }
     };
 
-    function setLanguage(lang) {
-      const dictionary = translations[lang] || translations.en;
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === "fa" || lang === "ar" ? "rtl" : "ltr";
-      document.title = dictionary.title;
+    const languageSelect = document.getElementById("languageSelect");
+    const mainNav = document.getElementById("mainNav");
+    const menuToggle = document.getElementById("menuToggle");
+    const inquiryForm = document.getElementById("inquiryForm");
+    const formStatus = document.getElementById("formStatus");
+
+    function setLanguage(language) {
+      const dictionary = translations[language] || translations.en;
+      document.documentElement.lang = language;
+      document.documentElement.dir = language === "fa" || language === "ar" ? "rtl" : "ltr";
+      document.body.dir = document.documentElement.dir;
 
       document.querySelectorAll("[data-i18n]").forEach(element => {
-        const key = element.getAttribute("data-i18n");
-        if (dictionary[key]) element.textContent = dictionary[key];
+        const key = element.dataset.i18n;
+        if (dictionary[key] !== undefined) {
+          element.textContent = dictionary[key];
+        }
       });
 
-      document.querySelectorAll("[data-lang]").forEach(button => {
-        const active = button.dataset.lang === lang;
-        button.classList.toggle("active", active);
-        button.setAttribute("aria-pressed", String(active));
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(element => {
+        const key = element.dataset.i18nPlaceholder;
+        if (dictionary[key] !== undefined) {
+          element.placeholder = dictionary[key];
+        }
       });
+
+      document.title = language === "fa"
+        ? "نکسورا | باشگاه کسب‌وکار"
+        : language === "ar"
+          ? "نكسورا | نادي الأعمال"
+          : "NEXORA Business Club | Connect. Grow. Lead.";
+
+      languageSelect.value = language;
+      formStatus.style.display = "none";
     }
 
-    document.querySelectorAll("[data-lang]").forEach(button => {
-      button.addEventListener("click", () => setLanguage(button.dataset.lang));
+    languageSelect.addEventListener("change", event => {
+      setLanguage(event.target.value);
+    });
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = mainNav.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.textContent = isOpen ? "✕" : "☰";
+    });
+
+    mainNav.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", () => {
+        mainNav.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.textContent = "☰";
+      });
+    });
+
+    inquiryForm.addEventListener("submit", event => {
+      event.preventDefault();
+      const language = languageSelect.value;
+      formStatus.textContent = translations[language].formStatus;
+      formStatus.style.display = "block";
     });
 
     document.getElementById("year").textContent = new Date().getFullYear();
